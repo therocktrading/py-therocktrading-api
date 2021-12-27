@@ -11,7 +11,7 @@
 
 pip:
 ```sh
-pip install python-therocktrading
+pip install py-therocktrading-api
 ```
 
 ## Quickstart

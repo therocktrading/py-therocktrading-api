@@ -24,7 +24,7 @@ with codecs.open(
         raise RuntimeError('Unable to determine version.')
 
 setup(
-    name='test-py-therocktrading-api',
+    name='py-therocktrading-api',
     version=version,
     description='Official TheRockTrading Python Library to comunicate with JSON REST API',
     long_description=long_description,
