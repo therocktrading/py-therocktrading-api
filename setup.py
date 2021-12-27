@@ -5,6 +5,9 @@ https://github.com/pypa/sampleproject
 """
 from setuptools import setup, find_packages
 from os import path
+import codecs
+import os
+import re
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -21,7 +24,7 @@ with codecs.open(
         raise RuntimeError('Unable to determine version.')
 
 setup(
-    name='py-therocktrading-api',
+    name='test-py-therocktrading-api',
     version=version,
     description='Official TheRockTrading Python Library to comunicate with JSON REST API',
     long_description=long_description,

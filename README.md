@@ -23,9 +23,9 @@ Go to settings page and get the API and APY SECRET keys.
 If you want to use the staging set `staging=True`.
 
 ```python
-from therock import Client
+from TheRockTrading import Client
 
-trt = Client(API_KEY='API', API_SECRET='API_SECRET', staging=False)
+trt = Client(API='API', API_SECRET='API_SECRET', staging=False)
 
 trt.currencies()
 ```

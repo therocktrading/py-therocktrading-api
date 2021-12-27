@@ -1,4 +1,4 @@
-from TheRockTrading.Config Config import Config 
+from TheRockTrading.Config import Config 
 
 class Client(Config):
     def __init__(self, API='', API_SECRET='', staging=False):
