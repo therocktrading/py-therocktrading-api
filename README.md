@@ -1,5 +1,5 @@
 # The Rock Trading Python Library 
-*TheRockTrading Python Library to comunicate with JSON REST API (current version -> v1)*
+*TheRockTrading Python Library to communicate with JSON REST API (current version -> v1)*
 # Features
 - Official implementation
 - Place orders
