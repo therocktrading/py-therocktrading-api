@@ -1,9 +1,11 @@
 from TheRockTrading import Client
+import plotly.graph_objs as go
 from datetime import datetime
 import multiprocessing.dummy
 import pandas as pd
 import os
 
+dir = "data/"
 
 def asks_bids(pair: str) -> dict:
     orderbook = client.orderbook(pair)
@@ -12,9 +14,9 @@ def asks_bids(pair: str) -> dict:
     return asks, bids
     
 def save(df: pd.DataFrame) -> None:
-    path = "data/orderbook.csv"
+    path = dir + "orderbook.csv"
     if not os.path.exists(path):
-        os.makedirs(path.split("/")[0], exist_ok=True)
+        os.makedirs(dir, exist_ok=True)
         df.to_csv(path, index=False)
     else:
         df.to_csv(path, index=False, header=False, mode="a")
@@ -34,6 +36,30 @@ def unpack(pair: str, date: datetime, book_tag: str, book: dict) -> dict:
         "price": prices, 
         "amounts": amounts
     }
+    
+def plot(df):
+    bid_plot = {
+    "mode": "lines+markers", 
+    "name": "bid", 
+    "type": "scatter", 
+    "x": df.price[df.orderbook == "bid"],
+    "y": df.amounts[df.orderbook == "bid"]
+    }
+    ask_plot = {
+    "mode": "lines+markers", 
+    "name": "ask", 
+    "type": "scatter", 
+    "x": df.price[df.orderbook == "ask"],
+    "y": df.amounts[df.orderbook == "ask"]
+    }
+    layout = {
+    "title": "Limited Order Book", 
+    "xaxis": {"title": "price"}, 
+    "yaxis": {"title": "amount"}
+    }
+    fig = go.Figure(data=([bid_plot, ask_plot]), layout=layout)
+    path = dir + f"orderbook_{df.pairs.values[0]}.html"
+    fig.write_html(path)
         
 def generate_df(pair: str) -> None:
     asks, bids = asks_bids(pair)
@@ -55,7 +81,9 @@ def generate_df(pair: str) -> None:
             book = bids            
         )
     )
-    save(pd.concat([df_asks, df_bids]))
+    df = pd.concat([df_asks, df_bids])
+    save(df)
+    plot(df)
 
 def main(pairs: list) -> None:
     pool = multiprocessing.dummy.Pool(8)
