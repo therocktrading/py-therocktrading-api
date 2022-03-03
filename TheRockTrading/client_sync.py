@@ -1,8 +1,8 @@
-from TheRockTrading.Config import Config 
+from .config_sync import ConfigSync 
 
-class Client(Config):
+class ClientSync(ConfigSync):
     def __init__(self, API='', API_SECRET='', staging=False):
-        self.configuration(API, API_SECRET, staging)
+        super().__init__(API, API_SECRET, staging)
 
 
     def balance(self, fund_id):
@@ -12,7 +12,7 @@ class Client(Config):
         Parameters Mandatory:
         - fund_id -> string: fund symbol
         """
-        self.url_creator(f'/balances/{fund_id}')
+        self._url_creator(f'/balances/{fund_id}')
         response = self.requests_and_parse('GET')
         return response
 
@@ -21,7 +21,7 @@ class Client(Config):
         """
         Get a list of all your balances in any currency.
         """
-        self.url_creator('/balances')
+        self._url_creator('/balances')
         response = self.requests_and_parse('GET')
         return response
 
@@ -47,7 +47,7 @@ class Client(Config):
         - per_page -> Integer: number of addresses per page. default 25 max 200
         - page -> Integer: page number. default 1
         """
-        self.url_creator(f'/currencies/{fund_id}/addresses')
+        self._url_creator(f'/currencies/{fund_id}/addresses')
         response = self.requests_and_parse('GET')
         return response
 
@@ -74,7 +74,7 @@ class Client(Config):
         - confidential ->  Boolean: Set to true in order to request a confidential address generation. 
                                     Parameter accepted when combined with BTC currency and 'liquid' network only.
         """
-        self.url_creator(f'/currencies/{fund_id}/addresses')
+        self._url_creator(f'/currencies/{fund_id}/addresses')
         response = self.requests_and_parse('POST')
         return response
 
@@ -86,7 +86,7 @@ class Client(Config):
         Parameters Mandatory:
         - transaction_id -> Integer: transaction id
         """
-        self.url_creator(f'/transactions/{transaction_id}')
+        self._url_creator(f'/transactions/{transaction_id}')
         response = self.requests_and_parse('GET')
         return response
 
@@ -115,7 +115,7 @@ class Client(Config):
         - transfer_id ->  String: filter transactions by a specific transfer ID 
                                   (e.g. Bitcoin TX hash)
         """
-        self.url_creator(f'/transactions')
+        self._url_creator(f'/transactions')
         response = self.requests_and_parse('GET')
         return response
 
@@ -127,7 +127,7 @@ class Client(Config):
         Parameters Mandatory:
         - fund_id -> string: fund symbol
         """
-        self.url_creator(f'/discounts/{fund_id}')
+        self._url_creator(f'/discounts/{fund_id}')
         response = self.requests_and_parse('GET')
         return response
 
@@ -136,7 +136,7 @@ class Client(Config):
         """
         Returns currencies related discount
         """
-        self.url_creator('/discounts')
+        self._url_creator('/discounts')
         response = self.requests_and_parse('GET')
         return response
 
@@ -148,7 +148,7 @@ class Client(Config):
         Parameters Mandatory:
         - fund_id -> string: fund symbol
         """
-        self.url_creator(f'/withdraw_limits/{fund_id}')
+        self._url_creator(f'/withdraw_limits/{fund_id}')
         response = self.requests_and_parse('GET')
         return response
 
@@ -157,7 +157,7 @@ class Client(Config):
         """
         Will return a list of your global and currently available withdraw levels.
         """
-        self.url_creator(f'/withdraw_limits')
+        self._url_creator(f'/withdraw_limits')
         response = self.requests_and_parse('GET')
         return response
 
@@ -184,7 +184,7 @@ class Client(Config):
 
 
         """
-        self.url_creator(f'/atms/withdraw')
+        self._url_creator(f'/atms/withdraw')
         response = self.requests_and_parse('POST')
         return response
 
@@ -197,7 +197,7 @@ class Client(Config):
         - fund_id -> string: fund symbol
         - order_id -> String: order ID
         """
-        self.url_creator(f'/funds/{fund_id}/main_positions/{order_id}')
+        self._url_creator(f'/funds/{fund_id}/main_positions/{order_id}')
         response = self.requests_and_parse('DELETE')
         return response
 
@@ -214,7 +214,7 @@ class Client(Config):
         - type -> String: filter main positions by type. Accepted values are: short, long
         - page -> Integer: page number. default 1
         """
-        self.url_creator(f'/funds/{fund_id}/main_positions?', params=params)
+        self._url_creator(f'/funds/{fund_id}/main_positions?', params=params)
         response = self.requests_and_parse('GET')
         return response
 
@@ -227,7 +227,7 @@ class Client(Config):
         - fund_id -> string: fund symbol
         - order_id -> String: order ID
         """
-        self.url_creator(f'/funds/{fund_id}/main_positions/{order_id}')
+        self._url_creator(f'/funds/{fund_id}/main_positions/{order_id}')
         response = self.requests_and_parse('GET')
         return response
 
@@ -242,7 +242,7 @@ class Client(Config):
         - amount -> String: the amount you want to transfer
         - currency -> String: base currency operating on the fund. (e.g. fund: BTCEUR -> base_currency: EUR)
         """
-        self.url_creator(f'/funds/{fund_id}/main_positions/{order_id}/transfer_balance?', params=params)
+        self._url_creator(f'/funds/{fund_id}/main_positions/{order_id}/transfer_balance?', params=params)
         response = self.requests_and_parse('POST')
         return response
 
@@ -257,7 +257,7 @@ class Client(Config):
         Parameters Mandatory:
         - fund_id -> string: fund symbol
         """
-        self.url_creator(f'/funds/{fund_id}/position_balances')
+        self._url_creator(f'/funds/{fund_id}/position_balances')
         response = self.requests_and_parse('GET')
         return response
 
@@ -271,7 +271,7 @@ class Client(Config):
         - type -> String: filter positions by type. Accepted values are: short, long
         - page -> Integer: page number. default 1
         """
-        self.url_creator(f'/funds/{fund_id}/positions?', params=params)
+        self._url_creator(f'/funds/{fund_id}/positions?', params=params)
         response = self.requests_and_parse('GET')
         return response
 
@@ -284,7 +284,7 @@ class Client(Config):
         - fund_id -> string: fund symbol
         - order_id -> String: order ID
         """
-        self.url_creator(f'/funds/{fund_id}/positions/{order_id}')
+        self._url_creator(f'/funds/{fund_id}/positions/{order_id}')
         response = self.requests_and_parse('GET')
         return response
         
@@ -293,7 +293,7 @@ class Client(Config):
         """
         Get all currencies info.
         """
-        self.url_creator('/currencies')
+        self._url_creator('/currencies')
         response = self.requests_and_parse('GET')
         return response
 
@@ -305,7 +305,7 @@ class Client(Config):
         Parameters Mandatory:
         - fund_id -> string: fund symbol
         """
-        self.url_creator(f'/currencies/{fund_id}')
+        self._url_creator(f'/currencies/{fund_id}')
         response = self.requests_and_parse('GET')
         return response
 
@@ -317,7 +317,7 @@ class Client(Config):
         Parameters Mandatory:
         - fund_id -> string: fund symbol
         """
-        self.url_creator(f'/fair_values/{fund_id}')
+        self._url_creator(f'/fair_values/{fund_id}')
         response = self.requests_and_parse('GET')
         return response
 
@@ -326,7 +326,7 @@ class Client(Config):
         """
         Get all fair values.
         """
-        self.url_creator(f'/fair_values')
+        self._url_creator(f'/fair_values')
         response = self.requests_and_parse('GET')
         return response
 
@@ -338,7 +338,7 @@ class Client(Config):
         Parameters Mandatory:
         - fund_id -> string: fund symbol
         """
-        self.url_creator(f'/funds/{fund_id}')
+        self._url_creator(f'/funds/{fund_id}')
         response = self.requests_and_parse('GET')
         return response
 
@@ -347,7 +347,7 @@ class Client(Config):
         """
         Get all funds at once.
         """
-        self.url_creator(f'/funds')
+        self._url_creator(f'/funds')
         response = self.requests_and_parse('GET')
         return response
 
@@ -367,7 +367,7 @@ class Client(Config):
                    Must be a multiple of 'period' minutes. Default is one day behind "before"
         - sort -> String: Accepted values are: ASC|DESC. Default: DESC
         """
-        self.url_creator(f'/funds/{fund_id}/ohlc_statistics?', params=params)
+        self._url_creator(f'/funds/{fund_id}/ohlc_statistics?', params=params)
         response = self.requests_and_parse('GET')
         return response
 
@@ -388,7 +388,7 @@ class Client(Config):
         - bid_depth -> String: bid depth filter to apply to bids entries only
                                (generic depth param will be applied if not specified)
         """
-        self.url_creator(f'/funds/{fund_id}/orderbook', params=params)
+        self._url_creator(f'/funds/{fund_id}/orderbook', params=params)
         response = self.requests_and_parse('GET')
         return response
 
@@ -400,7 +400,7 @@ class Client(Config):
         Parameters Mandatory:
         - fund_id -> string: fund symbol
         """
-        self.url_creator(f'/funds/{fund_id}/ticker/')
+        self._url_creator(f'/funds/{fund_id}/ticker/')
         response = self.requests_and_parse('GET')
         return response
 
@@ -409,7 +409,7 @@ class Client(Config):
         """
         Get all tickers at once.
         """
-        self.url_creator('/funds/tickers')
+        self._url_creator('/funds/tickers')
         response = self.requests_and_parse('GET')
         return response
 
@@ -431,7 +431,7 @@ class Client(Config):
                             (format %Y-%m-%dT%H:%M:%S%Z )
         - order -> String: order trades by id. Accepted values are: ASC|DESC. Default: DESC
         """
-        self.url_creator(f'/funds/{fund_id}/trades?', params=params)
+        self._url_creator(f'/funds/{fund_id}/trades?', params=params)
         response = self.requests_and_parse('GET')
         return response
 
@@ -444,7 +444,7 @@ class Client(Config):
         Parameters Mandatory:
         - fund_id -> string: fund symbol
         """
-        self.url_creator(f'/funds/{fund_id}/orders/remove_all')
+        self._url_creator(f'/funds/{fund_id}/orders/remove_all')
         response = self.requests_and_parse('DELETE')
         return response
 
@@ -457,7 +457,7 @@ class Client(Config):
         - fund_id -> string: fund symbol
         - order_id -> string: the id of the order to be cancelled.
         """
-        self.url_creator(f'/funds/{fund_id}/orders/{order_id}')
+        self._url_creator(f'/funds/{fund_id}/orders/{order_id}')
         response = self.requests_and_parse('DELETE')
         return response
 
@@ -482,7 +482,7 @@ class Client(Config):
         - side -> String: filter orders by side. Accepted values are: buy, sell
         - position_id -> Integer: filter orders by margin position ID. It collects all closing orders related to a specific margin position ID
         """
-        self.url_creator(f'/funds/{fund_id}/orders', params=params)
+        self._url_creator(f'/funds/{fund_id}/orders', params=params)
         response = self.requests_and_parse('GET')
         return response    
 
@@ -509,7 +509,7 @@ class Client(Config):
         - position_order_id -> String: position_order_id along with "close_long" or "close_short" as an alternative to position_id parameter
                                        in order to close all open positions originated by the same leveraged order.
         """
-        self.url_creator(f'/funds/{fund_id}/orders?', params=params)
+        self._url_creator(f'/funds/{fund_id}/orders?', params=params)
         response = self.requests_and_parse('POST')
         return response
 
@@ -522,7 +522,7 @@ class Client(Config):
         - fund_id -> String: fund symbol
         - order_id -> String: order ID
         """
-        self.url_creator(f'/funds/{fund_id}/orders/{order_id}')
+        self._url_creator(f'/funds/{fund_id}/orders/{order_id}')
         response = self.requests_and_parse('GET')
         return response    
 
@@ -543,6 +543,6 @@ class Client(Config):
         - before -> String: get only trades executed before a certain timestamp 
                             (format %Y-%m-%dT%H:%M:%S%Z)
         """
-        self.url_creator(f'/funds/{fund_id}/trades', params=params)
+        self._url_creator(f'/funds/{fund_id}/trades', params=params)
         response = self.requests_and_parse('GET')
         return response

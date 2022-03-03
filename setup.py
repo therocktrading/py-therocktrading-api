@@ -63,6 +63,7 @@ setup(
     # deps installed by pip
     install_requires=[
         'httpx~=0.21.1',
+        'aiohttp~=3.8.1',
     ],
     project_urls={
         'Doc': 'https://api.therocktrading.com/doc',
