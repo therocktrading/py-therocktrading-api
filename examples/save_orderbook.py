@@ -22,19 +22,19 @@ def save(df: pd.DataFrame) -> None:
         df.to_csv(path, index=False, header=False, mode="a")
     
 def unpack(pair: str, date: datetime, book_tag: str, book: dict) -> dict:
-    pairs, dates, book_tags, prices, amounts = [], [], [], [], []
+    pairs, dates, book_tags, prices, depth = [], [], [], [], []
     for idx in range(len(book)):
         pairs.append(pair)
         dates.append(date)
         book_tags.append(book_tag)
         prices.append(book[idx]['price'])
-        amounts.append(book[idx]['amount'])
+        depth.append(book[idx]['depth'])
     return {
         "pairs": pairs, 
         "datetime": dates, 
         "orderbook": book_tags, 
         "price": prices, 
-        "amounts": amounts
+        "depth": depth
     }
     
 def plot(df):
@@ -43,19 +43,23 @@ def plot(df):
     "name": "bid", 
     "type": "scatter", 
     "x": df.price[df.orderbook == "bid"],
-    "y": df.amounts[df.orderbook == "bid"]
+    "y": df.depth[df.orderbook == "bid"],
+    "fill": "tozeroy",
+    "line_color": 'green',
     }
     ask_plot = {
     "mode": "lines+markers", 
     "name": "ask", 
     "type": "scatter", 
     "x": df.price[df.orderbook == "ask"],
-    "y": df.amounts[df.orderbook == "ask"]
+    "y": df.depth[df.orderbook == "ask"],
+    "fill": "tozeroy",
+    "line_color": 'red',
     }
     layout = {
-    "title": "Limited Order Book", 
-    "xaxis": {"title": "price"}, 
-    "yaxis": {"title": "amount"}
+    "title": "Order Book", 
+    "xaxis": {"title": "Price"}, 
+    "yaxis": {"title": "Liquidity"}
     }
     fig = go.Figure(data=([bid_plot, ask_plot]), layout=layout)
     path = dir + f"orderbook_{df.pairs.values[0]}.html"
@@ -86,7 +90,7 @@ def generate_df(pair: str) -> None:
     plot(df)
 
 def main(pairs: list) -> None:
-    pool = multiprocessing.dummy.Pool(8)
+    pool = multiprocessing.dummy.Pool(1)
     pool.map(generate_df, pairs) 
     pool.close()
     pool.join()
