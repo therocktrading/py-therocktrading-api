@@ -51,7 +51,7 @@ class ClientAsync(ConfigAsync):
         return response
 
 
-    async def new_deposit_address(self):
+    async def new_deposit_address(self, fund_id, **params):
         """
         Submit a new address generation request for a currency. 
         A new address request returns no data if succeeds.
@@ -73,7 +73,7 @@ class ClientAsync(ConfigAsync):
         - confidential ->  Boolean: Set to true in order to request a confidential address generation. 
                                     Parameter accepted when combined with BTC currency and 'liquid' network only.
         """
-        self._url_creator(f'/currencies/{fund_id}/addresses')
+        self._url_creator(f'/currencies/{fund_id}/addresses', params=params)
         response = await self.requests_and_parse('POST')
         return response
 
@@ -161,7 +161,7 @@ class ClientAsync(ConfigAsync):
         return response
 
 
-    async def withdraw(self):
+    async def withdraw(self, amount, currency, destination_address, **params):
         """
         Will return a list of your global and currently available withdraw levels.
 
@@ -183,7 +183,7 @@ class ClientAsync(ConfigAsync):
 
 
         """
-        self._url_creator(f'/atms/withdraw')
+        self._url_creator(f'/atms/withdraw', amount, currency, destination_address, params=params)
         response = await self.requests_and_parse('POST')
         return response
 
@@ -213,7 +213,7 @@ class ClientAsync(ConfigAsync):
         - type -> String: filter main positions by type. Accepted values are: short, long
         - page -> Integer: page number. default 1
         """
-        self._url_creator(f'/funds/{fund_id}/main_positions?', params=params)
+        self._url_creator(f'/funds/{fund_id}/main_positions', params=params)
         response = await self.requests_and_parse('GET')
         return response
 
@@ -231,7 +231,7 @@ class ClientAsync(ConfigAsync):
         return response
 
 
-    async def transfer_balance(self, fund_id, order_id, **params):
+    async def transfer_balance(self, fund_id, order_id):
         """
         Transfer the amount of base currency required by maintenance_balance 
         (See showMainPosition API doc for further infomation ) to close a position. 
@@ -241,7 +241,7 @@ class ClientAsync(ConfigAsync):
         - amount -> String: the amount you want to transfer
         - currency -> String: base currency operating on the fund. (e.g. fund: BTCEUR -> base_currency: EUR)
         """
-        self._url_creator(f'/funds/{fund_id}/main_positions/{order_id}/transfer_balance?', params=params)
+        self._url_creator(f'/funds/{fund_id}/main_positions/{order_id}/transfer_balance')
         response = await self.requests_and_parse('POST')
         return response
 
@@ -270,7 +270,7 @@ class ClientAsync(ConfigAsync):
         - type -> String: filter positions by type. Accepted values are: short, long
         - page -> Integer: page number. default 1
         """
-        self._url_creator(f'/funds/{fund_id}/positions?', params=params)
+        self._url_creator(f'/funds/{fund_id}/positions', params=params)
         response = await self.requests_and_parse('GET')
         return response
 
@@ -305,7 +305,7 @@ class ClientAsync(ConfigAsync):
         - fund_id -> string: fund symbol
         """
         self._url_creator(f'/currencies/{fund_id}')
-        response =  await self.requests_and_parse('GET')
+        response = await self.requests_and_parse('GET')
         return response
 
 
@@ -349,7 +349,7 @@ class ClientAsync(ConfigAsync):
         self._url_creator(f'/funds')
         response = await self.requests_and_parse('GET')
         return response
-        
+
 
     async def ohlc_statistics(self, fund_id, **params):
         """
@@ -366,7 +366,7 @@ class ClientAsync(ConfigAsync):
                    Must be a multiple of 'period' minutes. Default is one day behind "before"
         - sort -> String: Accepted values are: ASC|DESC. Default: DESC
         """
-        self._url_creator(f'/funds/{fund_id}/ohlc_statistics?', params=params)
+        self._url_creator(f'/funds/{fund_id}/ohlc_statistics', params=params)
         response = await self.requests_and_parse('GET')
         return response
 
@@ -430,13 +430,13 @@ class ClientAsync(ConfigAsync):
                             (format %Y-%m-%dT%H:%M:%S%Z )
         - order -> String: order trades by id. Accepted values are: ASC|DESC. Default: DESC
         """
-        self._url_creator(f'/funds/{fund_id}/trades?', params=params)
+        self._url_creator(f'/funds/{fund_id}/trades', params=params)
         response = await self.requests_and_parse('GET')
         return response
 
 
 
-    async def cancel_all_orders(self, fund_id, order_id):
+    async def cancel_all_orders(self, fund_id):
         """
         Remove all active orders from the specified market.
 
@@ -448,7 +448,7 @@ class ClientAsync(ConfigAsync):
         return response
 
 
-    async def cancel_order(self, fund_id):
+    async def cancel_order(self, fund_id, order_id):
         """
         Remove an active order from the specified market.
 
@@ -467,10 +467,6 @@ class ClientAsync(ConfigAsync):
 
         Parameters Mandatory:
         - fund_id -> String: fund symbol
-        - side -> String: "buy" or "sell" order. "close_long" or "close_short" to place a closing position order 
-                        (position_id or position_order_id parameter required).
-        - amount -> String: the amount you want to Buy/Sell
-        - price -> String: the price of your order to be filled. If price is 0 (zero) a market order will be placed.
         
         Parameters Optional:
         - after -> String: filter orders after a certain timestamp 
@@ -503,12 +499,12 @@ class ClientAsync(ConfigAsync):
         - conditional_price -> String: conditional price represent the price at which your order will be triggered. 
                                        Need to be specified when conditional_type param is present.
         - leverage -> String: leverage to apply on "buy" or "sell" orders only. 
-                                       Leverage values are configured per fund. See fund API doc for further infomation.
+                                       Leverage values are configured per fund. See fund API doc for further information.
         - position_id -> String: position_id along with "close_long" or "close_short" parameter in order to close a single position.
         - position_order_id -> String: position_order_id along with "close_long" or "close_short" as an alternative to position_id parameter
                                        in order to close all open positions originated by the same leveraged order.
         """
-        self._url_creator(f'/funds/{fund_id}/orders?', params=params)
+        self._url_creator(f'/funds/{fund_id}/orders', params=params)
         response = await self.requests_and_parse('POST')
         return response
 
@@ -526,7 +522,7 @@ class ClientAsync(ConfigAsync):
         return response    
 
 
-    async def user_trades(self, fund_id, order_id, **params):
+    async def user_trades(self, fund_id, **params):
         """
         Show your order by ID.
 
