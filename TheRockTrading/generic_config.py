@@ -22,10 +22,13 @@ class GenericConfig:
         else:
             self.url_base = endpoint + host
 
+    def __add_params(self, **params):
+        if url_params := urlencode(params["params"]):
+                self.url += "?" + url_params
+
     def _url_creator(self, url_final, **params):
         self.url = self.url_base + url_final
-        if url_params := urlencode(params["params"]):
-            self.url += "?" + url_params
+        if params: self.__add_params(params=params)
 
     def __nonce_creator(self):
         self.__nonce = str(int(time.time()*1000))
