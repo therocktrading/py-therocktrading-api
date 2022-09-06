@@ -31,7 +31,7 @@ setup(
     long_description_content_type='text/markdown',
     url='https://github.com/therocktrading/py-therocktrading-api',
     author='Andrea Previtali',
-    author_email='andrea.previtali@therocktrading.com',
+    author_email='ipergiove@duck.com',
     classifiers=[
         # How mature is this project? Common values are
         #   3 - Alpha

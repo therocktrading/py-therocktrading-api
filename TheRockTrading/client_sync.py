@@ -143,7 +143,7 @@ class ClientSync(ConfigSync):
 
     def withdraw_limit(self, fund_id):
         """
-        Will return a currency related withdraw limit
+        Return a currency related withdraw limit
 
         Parameters Mandatory:
         - fund_id -> string: fund symbol
@@ -155,7 +155,7 @@ class ClientSync(ConfigSync):
 
     def withdraw_limits(self):
         """
-        Will return a list of your global and currently available withdraw levels.
+        Return a list of your global and currently available withdraw levels.
         """
         self._url_creator(f'/withdraw_limits')
         response = self.requests_and_parse('GET')
@@ -164,7 +164,7 @@ class ClientSync(ConfigSync):
 
     def withdraw(self, amount, currency, destination_address, **params):
         """
-        Will return a list of your global and currently available withdraw levels.
+        Return a list of your global and currently available withdraw levels.
 
         Parameters Mandatory:
         - currency -> String: Currency you want to withdraw
@@ -181,8 +181,6 @@ class ClientSync(ConfigSync):
                                        Check on therocktrading.com page how fees are respectively applied. 
                                        Currently available for bitcoin withdrawals only.
         - destination_tag -> Integer: Destination tag useful when combined with RIPPLE withdrawal method
-
-
         """
         self._url_creator(f'/atms/withdraw', amount, currency, destination_address, params=params)
         response = self.requests_and_parse('POST')
@@ -215,19 +213,6 @@ class ClientSync(ConfigSync):
         - page -> Integer: page number. default 1
         """
         self._url_creator(f'/funds/{fund_id}/main_positions', params=params)
-        response = self.requests_and_parse('GET')
-        return response
-
-
-    def positions_show(self, fund_id, order_id):
-        """
-        Show specific main position.
-
-        Parameters Mandatory:
-        - fund_id -> string: fund symbol
-        - order_id -> String: order ID
-        """
-        self._url_creator(f'/funds/{fund_id}/main_positions/{order_id}')
         response = self.requests_and_parse('GET')
         return response
 
@@ -312,7 +297,7 @@ class ClientSync(ConfigSync):
 
     def fair_value(self, fund_id):
         """
-        Get all fair values by currency
+        Get all fair value by currency
 
         Parameters Mandatory:
         - fund_id -> string: fund symbol
@@ -322,7 +307,7 @@ class ClientSync(ConfigSync):
         return response
 
 
-    def fair_value(self):
+    def fair_values(self):
         """
         Get all fair values.
         """

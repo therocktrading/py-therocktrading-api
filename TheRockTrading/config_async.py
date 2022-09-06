@@ -15,6 +15,10 @@ class ConfigAsync(GenericConfig):
             return session.get(self.url)
         elif method == "POST":
             return session.post(self.url)
+        elif method == "DELETE":
+            return session.delete(self.url)
+        else:
+            raise NotImplementedError
         
     async def requests_and_parse(self, method):
         async with self.__client_creator() as session:
